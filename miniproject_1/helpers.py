@@ -19,25 +19,25 @@ def compute_accuracy(labels, predictions):
 	return 1-error_rate
 
 
-def train_model(model, train_input, train_target, nb_epochs = 10):
+def train_model(model, train_input, train_target, mini_batch_size, nb_epochs=10):
 	criterion = nn.CrossEntropyLoss()
 	optimizer = optim.SGD(model.parameters(), lr = 1e-3)
 	for e in range(0, nb_epochs):
-		output = model(train_input)
-		print(output.size())
-		print(train_target.size())
-		loss = criterion(output, train_target)
-		model.zero_grad()
-		loss.backward()
-		optimizer.step()
+		for b in range(0, train_input.size(0), mini_batch_size):
+			output = model(train_input.narrow(0, b, mini_batch_size))
+			#print(train_input.narrow(0, b, mini_batch_size).size())
+			#print(output.size())
+			loss = criterion(output, train_target.narrow(0, b, mini_batch_size))
+			model.zero_grad()
+			loss.backward()
+			optimizer.step()
 
-def compute_nb_errors(model, data_input, data_target):
+def compute_nb_errors(model, data_input, data_target, mini_batch_size):
 	nb_data_errors = 0
-
-	output = model(data_input)
-	_, predicted_classes = torch.max(output.data, 1)
-	for k in range(0, data_target.size(0)):
-		if data_target.data[k] != predicted_classes[k]:
-			nb_data_errors = nb_data_errors + 1
-
+	for b in range(0, data_input.size(0), mini_batch_size):
+		output = model(data_input.narrow(0, b, mini_batch_size))
+		_, predicted_classes = torch.max(output.data, 1)
+		for k in range(0, mini_batch_size):
+			if data_target.data[b + k] != predicted_classes[k]:
+				nb_data_errors = nb_data_errors + 1
 	return nb_data_errors
