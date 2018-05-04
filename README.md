@@ -1,4 +1,4 @@
-## Deep Learning miniproject 1
+# Deep learning miniprojects
 
 Deep Learning course at EPFL (EE-559)
 
@@ -6,6 +6,7 @@ Group 2
 
 Pierre-Antoine Desplaces and Raphaël Steinmann
 
+## Miniproject 1
 
 ### What we did
 - Linear Regression
@@ -17,3 +18,5 @@ Pierre-Antoine Desplaces and Raphaël Steinmann
 - Try LSTM networks
 - Check https://www.quora.com/What-is-your-thought-process-when-choosing-a-neural-network-architecture
 - Check which architectures are more appropriate for time series
+
+## Miniproject 2
