@@ -32,7 +32,9 @@ def train_model(model, train_input, train_target, mini_batch_size, nb_epochs=100
 			model.zero_grad()
 			loss.backward()
 			optimizer.step()
-		print("Epoch", e, "loss =", sum_loss)
+		if ((e+1)%10)==0 or e==0:
+			print("            Epoch", e+1, "loss =", sum_loss)
+
 
 def compute_nb_errors(model, data_input, data_target, mini_batch_size):
 	nb_data_errors = 0
@@ -43,6 +45,16 @@ def compute_nb_errors(model, data_input, data_target, mini_batch_size):
 		for k in range(0, mini_batch_size):
 			if data_target.data[b + k] != predicted_classes[k]:
 				nb_data_errors = nb_data_errors + 1
+	return nb_data_errors
+
+def compute_nb_errors(model, data_input, data_target):
+	nb_data_errors = 0
+	model.eval()
+	output = model(data_input)
+	_, predicted_classes = torch.max(output.data, 1)
+	for k in range(0, data_target.size(0)):
+		if data_target.data[k] != predicted_classes[k]:
+			nb_data_errors = nb_data_errors + 1
 	return nb_data_errors
 
 def convert_to_one_hot_labels(input, target):
