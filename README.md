@@ -9,8 +9,12 @@ Pierre-Antoine Desplaces and Raphaël Steinmann
 ## Miniproject 1
 
 ### What we did
+- Normalized the data
 - Linear Regression
-- Basic Neural Network with a simple architecture (3 layers, tanh, CrossEntropyLoss)
+- Logistic Regression
+- Basic MLP
+- Basic Convonlutional Neural Network with a simple architecture (2 conv layers w max pooling, 2 fully connected layers, tanh activations, CrossEntropyLoss)
+- Better CNN with one dimensional filter
 
 ### TODO
 - Do a grid search on the parameters (step size, n_epochs)
