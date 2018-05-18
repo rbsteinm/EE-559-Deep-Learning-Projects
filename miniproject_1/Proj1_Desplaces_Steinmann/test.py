@@ -3,10 +3,7 @@ from torch import Tensor
 from torch.autograd import Variable
 
 import numpy as np
-
-torch.manual_seed(1)
 np.random.seed(1)
-torch.set_num_threads(4)
 
 import dlc_bci as bci
 from helpers import *
@@ -63,10 +60,10 @@ print("Validation target :", str(type(validation_target)), validation_target.siz
 print("Test input :", str(type(test_input)), test_input.size()) 
 print("Test target :", str(type(test_target)), test_target.size())
 
-
-best_model = CNN_1D()
-best_epoch = 20
-best_lr = 0.005
+torch.manual_seed(1)
+best_model = CNN_dropout()
+best_epoch = 45
+best_lr = 0.001
 mini_batch_size = 250
 
 print("Training the model for", best_epoch, "epochs, with a learning rate of", best_lr)
