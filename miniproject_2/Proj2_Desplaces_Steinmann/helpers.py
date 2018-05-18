@@ -1,6 +1,8 @@
 from torch import FloatTensor, LongTensor, Tensor
 import math
 
+# Generates a training and a test set of 1000 points sampled uniformly in [0,1]^2
+# each with a label 0 if outside the disk of radius 1/sqrt(2*PI) and 1 if inside
 def generate_disc_set(nb):
     a = Tensor(nb, 2).uniform_(0, 1)
     target = (((a-0.5).pow(2).sum(1)).sqrt() < math.sqrt(1/(2*math.pi))).long()
