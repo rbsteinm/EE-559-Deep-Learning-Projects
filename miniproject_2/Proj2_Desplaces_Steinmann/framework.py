@@ -69,11 +69,17 @@ class Tanh(Module):
 # Linear Module
 
 class Linear(Module):   
-    def __init__(self, in_dim, out_dim):
+    def __init__(self, in_dim, out_dim, xavier_init=False):
         # keep track of the weigths, the biases and the output of the previous layer's activation function
-        self.w = Tensor(out_dim,in_dim).normal_(0)
-        self.b = Tensor(out_dim,1).normal_(0)
         self.x_previous_layer = None
+        # either initialize the weigths with xavier and the biases to 0
+        if xavier_init:
+            self.w = Tensor(out_dim,in_dim).normal_(0, 2/(in_dim+out_dim))
+            self.b = Tensor(out_dim,1).zero_()
+        # or intialize the weights and biases with a normal(0,1) distribution
+        else:
+            self.w = Tensor(out_dim,in_dim).normal_()
+            self.b = Tensor(out_dim,1).normal_()
         # init the gradient of the loss wrt w / b
         self.grad_w_sum = Tensor(self.w.size()).zero_()
         self.grad_b_sum = Tensor(self.b.size()).zero_()
