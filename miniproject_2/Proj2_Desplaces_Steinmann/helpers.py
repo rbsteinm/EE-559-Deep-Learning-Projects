@@ -3,7 +3,7 @@ import math
 
 def generate_disc_set(nb):
     a = Tensor(nb, 2).uniform_(0, 1)
-    target = ((a.pow(2).sum(1)).sqrt() < math.sqrt(1/(2*math.pi))).long()
+    target = (((a-0.5).pow(2).sum(1)).sqrt() < math.sqrt(1/(2*math.pi))).long()
     return a, target
 
 
