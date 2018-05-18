@@ -151,6 +151,31 @@ class LossMSE(Module):
         return []
 
 
+# Cross-entropy Loss Function
+
+class LossCrossEntropy(Module): 
+    def __init__(self):
+        self.p = None
+        self.c = None
+        
+    # stabilized version of softmax: convert each prediction to a probability
+    # to avoid nans due to big exponentials
+    def softmax(self, t):
+        stable_exp = (t - t.max(1)[0].unsqueeze(1)).exp()
+        return stable_exp / (stable_exp.sum(1).unsqueeze(1))
+        
+    def forward(self, preds, labels):
+        self.p = self.softmax(preds)
+        self.c = labels
+        return -(self.c * self.p.log()).sum()
+        
+    def backward(self):
+        return(self.p-self.c)
+        
+    def param(self):
+        return []
+
+
 # SGD Optimization
 
 class optim_SGD(Module):

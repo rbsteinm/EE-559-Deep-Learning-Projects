@@ -14,6 +14,7 @@ nb_epochs = 100
 mini_batch_size = 5
 model = Sequential(Linear(2,25), Tanh(), Linear(25,25), Tanh(), Linear(25, 25), Tanh(), Linear(25,2))
 criterion = LossMSE()
+#criterion = LossCrossEntropy()
 optimizer = optim_SGD(model.param(), 1e-3)
 
 # train the model
