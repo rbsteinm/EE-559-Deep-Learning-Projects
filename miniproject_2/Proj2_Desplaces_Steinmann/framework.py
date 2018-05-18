@@ -128,7 +128,7 @@ class Sequential(Module):
     def param(self):
         return [ p for module in self.modules for p in module.param() ]
     
-    # s,
+    # sets the gradient of each layer to zero before the next batch can go through the network
     def zero_grad(self):
         for module in self.modules:
             module.zero_grad()
