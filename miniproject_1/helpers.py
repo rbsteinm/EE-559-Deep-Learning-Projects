@@ -1,6 +1,4 @@
 import torch
-import math
-
 from torch import optim
 from torch import Tensor, LongTensor
 from torch import nn
@@ -25,7 +23,7 @@ def train_model(model, train_input, train_target, mini_batch_size, nb_epochs=100
             loss.backward()
             optimizer.step()
         if verbose and (((e+1)%10)==0 or e==0):
-            print("Epoch", e+1, "loss =", sum_loss)
+            print("    Epoch", e+1, "loss =", sum_loss)
 
 def compute_nb_errors(model, data_input, data_target):
     nb_data_errors = 0
@@ -37,8 +35,47 @@ def compute_nb_errors(model, data_input, data_target):
             nb_data_errors = nb_data_errors + 1
     return nb_data_errors
 
-def convert_to_one_hot_labels(target):
-    tmp = LongTensor(target.size(0), target.max() + 1).fill_(-1)
-    for k in range(target.size(0)):
-        tmp[k, target[k]] = 1
-    return tmp
+# grid search for parameters on validation set
+def find_best_params(network, train_input, train_target, val_input, val_target, learning_rates, nb_epochs_total, epoch_step, mini_batch_size):
+    res = []
+    best_error = val_input.size(0)+1
+
+    print("MODEL", network().__class__.__name__)
+    print("="*18)
+
+    for lr in learning_rates: 
+        print("  Learning rate", lr, ":")
+        print("-"*23)
+
+        epoch_acc = []
+        #torch.manual_seed(1)
+        model = network()
+        criterion = nn.CrossEntropyLoss()
+        optimizer = optim.Adam(model.parameters(), lr=lr)
+        
+        for e in range(nb_epochs_total):
+            sum_loss = 0
+            model.train()
+            for b in range(0, train_input.size(0), mini_batch_size):
+                output = model(train_input.narrow(0, b, mini_batch_size))
+                loss = criterion(output, train_target.narrow(0, b, mini_batch_size))
+                sum_loss = sum_loss + loss.data[0]
+                model.zero_grad()
+                loss.backward()
+                optimizer.step()
+                
+            if (e+1)%epoch_step == 0 or e==0:
+                validation_error = compute_nb_errors(model, val_input, val_target)
+                epoch_acc.append(100*(validation_error/val_input.size(0)))
+
+                if (e+1)%(10*epoch_step) == 0 or e==0:
+                    print("    Epoch {:>4} : loss = {:1.8f} | validation error = {:>4}".format(e+1, sum_loss, validation_error))
+                
+                if (validation_error < best_error) or ( (validation_error == best_error) and ((e+1) < best_epoch) ):
+                    best_error = validation_error
+                    best_epoch = e+1
+                    best_lr = lr
+                    
+        res.append(epoch_acc)
+    print("Done.")
+    return res, best_epoch, best_lr, best_error
