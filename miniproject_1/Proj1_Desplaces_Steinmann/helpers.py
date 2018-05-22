@@ -12,7 +12,6 @@ def train_model(model, train_input, train_target, mini_batch_size, nb_epochs=100
     model.train()
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
-    #optimizer = optim.SGD(model.parameters(), lr=learning_rate)
     for e in range(0, nb_epochs):
         sum_loss = 0
         for b in range(0, train_input.size(0), mini_batch_size):
@@ -48,7 +47,6 @@ def find_best_params(network, train_input, train_target, val_input, val_target, 
         print("-"*23)
 
         epoch_acc = []
-        #torch.manual_seed(1)
         model = network()
         criterion = nn.CrossEntropyLoss()
         optimizer = optim.Adam(model.parameters(), lr=lr)
