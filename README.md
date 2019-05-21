@@ -1,12 +1,20 @@
 # Deep learning miniprojects
 
-Deep Learning course at EPFL (EE-559)
+This repository contains our implementation of the two mendatory projects of François Chollet's _Deep Learning_ course at EPFL (EE-559).
 
-Group 2
-
-Pierre-Antoine Desplaces and Raphaël Steinmann
+Authors: Pierre-Antoine Desplaces and Raphaël Steinmann.
 
 ## Miniproject 1
+
+### Project description
+The goal of this project is to implement a neural network to predict the laterality of an upcoming finger movement (left or right hand) from the EEG recording 130 ms before key-press. This is a standard two-class classification problem.
+
+The dataset comes from the _BCI competition II_ organized in May 2003 ([Benjamin Blankertz and Müller, 2002](http://www.bbci.de/competition/ii/)). It is composed of 316 training recordings, and 100 test recordings, each composed of 28 EEG channels sampled at 1khz for 0.5s.
+
+The complete description and instructions of the first miniproject can be found under `miniproject_1 > dlc-miniproject-1.pdf`.
+
+###
+
 
 ### What we did
 - Normalized the data
